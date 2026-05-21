@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 59 130 246;
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    --accent: 241 245 249;
+    --destructive: 239 68 68;
+    --sidebar-bg: 15 23 42;
+    --sidebar-border: 30 41 59;
+    --sidebar-text: 148 163 184;
+    --sidebar-text-active: 255 255 255;
+    --sidebar-hover: 30 41 59;
+    --card: 255 255 255;
+    --card-border: 226 232 240;
+  }
+
+  .dark {
+    --background: 15 23 42;
+    --foreground: 248 250 252;
+    --border: 30 41 59;
+    --input: 30 41 59;
+    --ring: 59 130 246;
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
+    --muted: 30 41 59;
+    --muted-foreground: 100 116 139;
+    --accent: 30 41 59;
+    --destructive: 239 68 68;
+    --sidebar-bg: 2 6 23;
+    --sidebar-border: 15 23 42;
+    --sidebar-text: 100 116 139;
+    --sidebar-text-active: 255 255 255;
+    --sidebar-hover: 15 23 42;
+    --card: 15 23 42;
+    --card-border: 30 41 59;
+  }
+
+  * {
+    @apply border-slate-200 dark:border-slate-700;
+  }
+
+  body {
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-slate-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm;
+  }
+
+  .input-base {
+    @apply w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg
+    text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500
+    focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent
+    transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium
+    bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200
+    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+    disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium
+    bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700
+    text-slate-700 dark:text-slate-300 rounded-lg transition-colors duration-200
+    focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2
+    disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium
+    bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200
+    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+    disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-slate-900 dark:text-slate-100;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-slate-500 dark:text-slate-400;
+  }
+
+  .stat-card {
+    @apply card p-6 hover:shadow-md transition-shadow duration-200;
+  }
+
+  .table-container {
+    @apply card overflow-hidden;
+  }
+
+  table th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider
+    bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700;
+  }
+
+  table td {
+    @apply px-4 py-3 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800;
+  }
+
+  table tr:last-child td {
+    @apply border-0;
+  }
+
+  table tr:hover td {
+    @apply bg-slate-50 dark:bg-slate-800/30;
+  }
+}

@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── NextAuth Models ─────────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Users ───────────────────────────────────────────────────────────────────
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role            @default(STAFF)
+  phone         String?
+  accounts      Account[]
+  sessions      Session[]
+  movements     StockMovement[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+// ─── Inventory ────────────────────────────────────────────────────────────────
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  color       String?   @default("#3B82F6")
+  icon        String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Supplier {
+  id        String    @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  contact   String?
+  website   String?
+  notes     String?
+  isActive  Boolean   @default(true)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id          String          @id @default(cuid())
+  name        String
+  sku         String          @unique
+  description String?
+  price       Decimal         @db.Decimal(10, 2)
+  cost        Decimal         @db.Decimal(10, 2)
+  stock       Int             @default(0)
+  minStock    Int             @default(5)
+  maxStock    Int?
+  unit        String          @default("unit")
+  images      String[]
+  barcode     String?
+  location    String?
+  tags        String[]
+  isActive    Boolean         @default(true)
+  categoryId  String?
+  supplierId  String?
+  category    Category?       @relation(fields: [categoryId], references: [id])
+  supplier    Supplier?       @relation(fields: [supplierId], references: [id])
+  orderItems  OrderItem[]
+  movements   StockMovement[]
+  alerts      Alert[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  orderNum  String      @unique
+  type      OrderType
+  status    OrderStatus @default(PENDING)
+  total     Decimal     @db.Decimal(10, 2)
+  notes     String?
+  userId    String
+  items     OrderItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model StockMovement {
+  id        String       @id @default(cuid())
+  productId String
+  userId    String
+  type      MovementType
+  quantity  Int
+  prevStock Int
+  newStock  Int
+  reason    String?
+  reference String?
+  product   Product      @relation(fields: [productId], references: [id])
+  user      User         @relation(fields: [userId], references: [id])
+  createdAt DateTime     @default(now())
+}
+
+model Alert {
+  id        String    @id @default(cuid())
+  type      AlertType
+  title     String
+  message   String
+  productId String?
+  isRead    Boolean   @default(false)
+  product   Product?  @relation(fields: [productId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+enum OrderType {
+  PURCHASE
+  SALE
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum MovementType {
+  IN
+  OUT
+  ADJUSTMENT
+  RETURN
+}
+
+enum AlertType {
+  LOW_STOCK
+  OUT_OF_STOCK
+  OVERSTOCK
+  REORDER
+  SYSTEM
+}
