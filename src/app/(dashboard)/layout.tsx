@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   const title = Object.entries(PAGE_TITLES).find(([path]) =>
-    pathname === path || pathname.startsWith(path + '/')
+    pathname === path || (pathname?.startsWith(path + '/') ?? false)
   )?.[1] || 'Dashboard';
 
   return (
