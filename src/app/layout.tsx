@@ -4,6 +4,8 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { SocketProvider } from '@/components/providers/SocketProvider';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: {
     default: 'InventoryPro',
