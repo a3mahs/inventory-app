@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install && rm -rf .next/cache/webpack 2>/dev/null; npm run build"
+buildCommand = "NODE_ENV=production npm install && rm -rf .next/cache/webpack 2>/dev/null; NODE_ENV=production npm run build"
 
 [deploy]
 startCommand = "npm run db:migrate && npm start"
