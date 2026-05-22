@@ -10,7 +10,8 @@ import { Loading } from '@/components/ui/Loading';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 
 export default function ProductDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
   const router = useRouter();
   const [product, setProduct] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
